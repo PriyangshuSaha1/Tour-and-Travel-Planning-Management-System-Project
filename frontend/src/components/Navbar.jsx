@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 
 const Navbar = () => {
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
 
+    const hl = ()=>{
+        localStorage.removeItem("token");
+        navigate('/login');
+
+    }
     return (
         <>
             <nav className="bg-blue-700 text-white shadow-xl">
@@ -18,11 +25,24 @@ const Navbar = () => {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex gap-6">
-                        <Link to="/">Home</Link>
-                        <Link to="/about">About</Link>
-                        <Link to="/contact">Contact</Link>
-                        <Link to="/add">Add Tour</Link>
-                        <Link to="/view">View Tour</Link>
+                        <Link className="hover:text-yellow-300 duration-300" to="/">Register</Link>
+                        <Link className="hover:text-yellow-300 duration-300" to="/login">Login</Link>
+                        {token && (
+                            <>
+                            <Link className="hover:text-yellow-300 duration-300" to="/home">Home</Link>
+                        <Link className="hover:text-yellow-300 duration-300" to="/about">About</Link>
+                        <Link 
+                        className="hover:text-yellow-300 duration-300" to="/contact">Contact</Link>
+                        <Link className="hover:text-yellow-300 duration-300" to="/add">Add Tour</Link>
+                        <Link className="hover:text-yellow-300 duration-300" to="/view">View Tour</Link>
+                        
+                        <button onClick ={hl}>Logout</button> 
+                            
+                            </>
+
+                        )}
+
+                        
                     </div>
 
                     {/* Mobile Button */}

@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectdb = require("./config/db");
 const tourroutes = require("./routes/tourroutes");
+const userroutes = require("./routes/userroutes");
 
 //call .env file first
 dotenv.config();
@@ -18,6 +19,8 @@ connectdb();
 //middleware used for request and response cycle handling called buildin middleware
 app.use(cors());
 app.use("/api/tours",tourroutes);
+
+app.use("/api/auth",userroutes);
 app.get('/',(req,res)=>{
     res.send("API is working");
 });
