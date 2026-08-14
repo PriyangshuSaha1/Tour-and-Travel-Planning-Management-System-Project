@@ -18,10 +18,7 @@ connectdb();
 
 //for calling cors
 //middleware used for request and response cycle handling called buildin middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
-  credentials: true,
-}));
+app.use(cors());
 app.use("/api/tours",tourroutes);
 
 app.use("/api/auth",userroutes);
