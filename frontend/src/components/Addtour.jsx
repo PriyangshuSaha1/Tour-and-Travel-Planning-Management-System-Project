@@ -1,9 +1,9 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../utils/api";
 
 const Addtour = () => {
-  const [tour, setTour] = useState({ title:"", description:"", price:"" });
+  const [tour, setTour] = useState({ title:"", description:"", price:"", image:"" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -59,6 +59,11 @@ const Addtour = () => {
                 <div>
                   <label className="block text-gray-700 text-sm font-semibold mb-1.5">Tour Title <span className="text-red-500">*</span></label>
                   <input type="text" name="title" value={tour.title} onChange={handleChange} required placeholder="e.g. 5-Night Bali Paradise Package"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-gray-50 focus:bg-white text-sm"/>
+                </div>
+                <div>
+                  <label className="block text-gray-700 text-sm font-semibold mb-1.5">Image URL <span className="text-gray-400 font-normal">(Optional)</span></label>
+                  <input type="url" name="image" value={tour.image} onChange={handleChange} placeholder="e.g. https://images.unsplash.com/..."
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-gray-50 focus:bg-white text-sm"/>
                 </div>
                 <div>

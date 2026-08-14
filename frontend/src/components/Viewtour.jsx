@@ -3,14 +3,6 @@ import { Link } from "react-router-dom";
 import API from "../utils/api";
 import { getUser } from "../utils/auth";
 
-const tourImages = [
-  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80",
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=600&q=80",
-  "https://images.pexels.com/photos/338515/pexels-photo-338515.jpeg?w=600",
-  "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80",
-  "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80",
-  "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80",
-];
 
 const Viewtour = () => {
   const [tours, setTours] = useState([]);
@@ -93,7 +85,7 @@ const Viewtour = () => {
               {filtered.map((tour, index) => (
                 <div key={tour._id} className="bg-white rounded-2xl shadow-md overflow-hidden card-hover border border-gray-100 group">
                   <div className="relative overflow-hidden h-52">
-                    <img src={tourImages[index % tourImages.length]} alt={tour.title}
+                    <img src={tour.image || "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80"} alt={tour.title}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"/>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"/>
                     <span className="absolute top-3 right-3 bg-white/90 text-gray-700 text-xs font-bold px-2.5 py-1 rounded-full">✈️ Package</span>

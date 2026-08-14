@@ -9,7 +9,8 @@ const TourSchema = new mongoose.Schema({
     duration: String,
     maxPeople: Number,
     category: String,
-    availableSeats: Number
+    availableSeats: Number,
+    image: String
 });
 //exporting the model
 

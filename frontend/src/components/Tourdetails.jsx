@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import API from "../utils/api";
 import { Link, useParams } from "react-router-dom";
 
@@ -275,7 +275,7 @@ const Tourdetails = () => {
       {/* Hero Banner */}
       <section className="relative h-72 text-white" style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)" }}>
         <div className="absolute inset-0 opacity-20"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80')", backgroundSize: "cover", backgroundPosition: "center" }} />
+          style={{ backgroundImage: `url('${tour.image || "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80"}')`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-end pb-8">
           <div className="flex items-center gap-2 text-blue-300 text-sm mb-3">
             <Link to="/view" className="hover:text-white transition">Tours</Link>

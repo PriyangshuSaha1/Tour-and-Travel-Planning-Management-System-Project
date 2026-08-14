@@ -1,11 +1,11 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import API from "../utils/api";
 
 const Edittour = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [tour, setTour] = useState({ title: "", description: "", price: "" });
+  const [tour, setTour] = useState({ title: "", description: "", price: "", image: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -16,7 +16,7 @@ const Edittour = () => {
       try {
         const res = await API.get(`/tours/${id}`);
         const data = res.data?.tours || res.data?.tour || res.data;
-        setTour({ title: data.title, description: data.description, price: data.price });
+        setTour({ title: data.title, description: data.description, price: data.price, image: data.image || "" });
       } catch {
         setError("Failed to load tour data.");
       } finally {
@@ -118,6 +118,15 @@ const Edittour = () => {
                   <input
                     type="text" name="title" value={tour.title} onChange={handleChange} required
                     placeholder="e.g. 5-Night Bali Paradise Package"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 transition-all bg-gray-50 focus:bg-white text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 text-sm font-semibold mb-1.5">Image URL <span className="text-gray-400 font-normal">(Optional)</span></label>
+                  <input
+                    type="url" name="image" value={tour.image} onChange={handleChange}
+                    placeholder="e.g. https://images.unsplash.com/..."
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-100 transition-all bg-gray-50 focus:bg-white text-sm"
                   />
                 </div>
