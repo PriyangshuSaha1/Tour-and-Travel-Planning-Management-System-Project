@@ -5,8 +5,15 @@ export default {
     "./src/**/*.{js,jsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+        serif: ['"Playfair Display"', 'serif'],
+      },
+      transitionDuration: {
+        '400': '400ms',
+      },
+    },
   },
   plugins: [],
 }
-

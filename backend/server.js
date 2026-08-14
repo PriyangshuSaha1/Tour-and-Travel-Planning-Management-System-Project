@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const connectdb = require("./config/db");
 const tourroutes = require("./routes/tourroutes");
 const userroutes = require("./routes/userroutes");
+const bookingroutes = require("./routes/bookingroutes");
 
 //call .env file first
 dotenv.config();
@@ -17,10 +18,14 @@ connectdb();
 
 //for calling cors
 //middleware used for request and response cycle handling called buildin middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  credentials: true,
+}));
 app.use("/api/tours",tourroutes);
 
 app.use("/api/auth",userroutes);
+app.use("/api/bookings", bookingroutes);
 app.get('/',(req,res)=>{
     res.send("API is working");
 });
