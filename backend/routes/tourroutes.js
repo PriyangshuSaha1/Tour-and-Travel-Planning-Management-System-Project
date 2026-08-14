@@ -1,4 +1,4 @@
-﻿const express = require("express");
+const express = require("express");
 const router = express.Router();
 const Tour = require("../models/tour");
 const { auth, isProvider } = require("../middleware/auth");
@@ -26,6 +26,7 @@ router.post("/", isProvider, async (req, res) => {
       title: req.body.title,
       description: req.body.description,
       price: req.body.price,
+      image: req.body.image
     });
     res.status(201).json(tour);
   } catch (err) { res.status(500).json({ message: err.message }); }
