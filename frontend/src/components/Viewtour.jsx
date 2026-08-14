@@ -1,6 +1,7 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import API from "../utils/api";
+import { getUser } from "../utils/auth";
 
 const tourImages = [
   "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80",
@@ -13,6 +14,7 @@ const tourImages = [
 
 const Viewtour = () => {
   const [tours, setTours] = useState([]);
+  const user = getUser();
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [deletingId, setDeletingId] = useState(null);
@@ -72,17 +74,19 @@ const Viewtour = () => {
             <p className="text-gray-600 text-sm">
               Showing <strong className="text-gray-900">{filtered.length}</strong> of <strong className="text-gray-900">{tours.length}</strong> tours
             </p>
-            <Link to="/add" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition hover:shadow-md hover:-translate-y-0.5">
-              ➕ Add New Tour
-            </Link>
+            {user?.role === 'provider' && (
+              <Link to="/add" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition hover:shadow-md hover:-translate-y-0.5">
+                ➕ Add New Tour
+              </Link>
+            )}
           </div>
 
           {filtered.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-md p-16 text-center">
               <div className="text-6xl mb-4">🗺️</div>
               <h2 className="text-2xl font-bold text-gray-700">No Tours Found</h2>
-              <p className="text-gray-500 mt-3">Try a different search or add a new tour.</p>
-              <Link to="/add" className="inline-block mt-6 bg-blue-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition">➕ Add Tour</Link>
+              <p className="text-gray-500 mt-3">Try a different search{user?.role === 'provider' ? ' or add a new tour.' : '.'}</p>
+              {user?.role === 'provider' && <Link to="/add" className="inline-block mt-6 bg-blue-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition">➕ Add Tour</Link>}
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -111,14 +115,18 @@ const Viewtour = () => {
                         className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center text-sm font-semibold py-2.5 rounded-xl transition hover:shadow-md">
                         View Details
                       </Link>
-                      <Link to={`/edit/${tour._id}`}
-                        className="bg-yellow-50 hover:bg-yellow-100 text-yellow-700 text-sm font-semibold px-3.5 py-2.5 rounded-xl border border-yellow-200 hover:border-yellow-400 transition">
-                        ✏️
-                      </Link>
-                      <button onClick={()=>deleteTour(tour._id)} disabled={deletingId===tour._id}
-                        className="bg-red-50 hover:bg-red-100 text-red-600 text-sm font-semibold px-3.5 py-2.5 rounded-xl border border-red-100 hover:border-red-300 transition disabled:opacity-50">
-                        {deletingId===tour._id ? "..." : "🗑️"}
-                      </button>
+                      {user?.role === 'provider' && (
+                        <>
+                          <Link to={`/edit/${tour._id}`}
+                            className="bg-yellow-50 hover:bg-yellow-100 text-yellow-700 text-sm font-semibold px-3.5 py-2.5 rounded-xl border border-yellow-200 hover:border-yellow-400 transition">
+                            ✏️
+                          </Link>
+                          <button onClick={()=>deleteTour(tour._id)} disabled={deletingId===tour._id}
+                            className="bg-red-50 hover:bg-red-100 text-red-600 text-sm font-semibold px-3.5 py-2.5 rounded-xl border border-red-100 hover:border-red-300 transition disabled:opacity-50">
+                            {deletingId===tour._id ? "..." : "🗑️"}
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -1,18 +1,20 @@
-﻿const express = require("express");
+const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const auth = require("../middleware/auth");
+const { auth } = require("../middleware/auth");
 
 // POST /api/auth/register
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     if (!name || !email || !password)
       return res.status(400).json({ message: "All fields are required." });
     const hashedpswd = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hashedpswd });
+    // Allow 'tourist' or 'provider' roles
+    const userRole = (role === 'provider') ? 'provider' : 'tourist';
+    await User.create({ name, email, password: hashedpswd, role: userRole });
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
     if (err.code === 11000)
@@ -30,11 +32,11 @@ router.post("/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Invalid email or password." });
     const token = jwt.sign(
-      { userId: user._id, name: user.name, email: user.email },
+      { userId: user._id, name: user.name, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
-    res.json({ token, user: { name: user.name, email: user.email } });
+    res.json({ token, user: { name: user.name, email: user.email, role: user.role } });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

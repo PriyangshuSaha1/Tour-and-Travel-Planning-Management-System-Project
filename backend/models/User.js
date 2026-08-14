@@ -4,7 +4,8 @@ const userschema = new mongoose.Schema({
 
     name : String,
     email: {type:String , unique:true},
-    password: String
+    password: String,
+    role: { type: String, enum: ['tourist', 'provider'], default: 'tourist' }
 });
 //exporting the model
 

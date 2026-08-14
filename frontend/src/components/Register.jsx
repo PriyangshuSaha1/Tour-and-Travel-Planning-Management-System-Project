@@ -1,10 +1,10 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../utils/api";
 import { isLoggedIn } from "../utils/auth";
 
 const Register = () => {
-  const [form, setForm] = useState({ name:"", email:"", password:"" });
+  const [form, setForm] = useState({ name:"", email:"", password:"", role:"tourist" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -61,6 +61,20 @@ const Register = () => {
                 </div>
                 {error && <div className="mb-5 bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl flex gap-2 items-center">⚠️ {error}</div>}
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="flex gap-4 mb-4">
+                    <label className="flex-1 cursor-pointer">
+                      <input type="radio" name="role" value="tourist" checked={form.role === "tourist"} onChange={handleChange} className="peer sr-only" />
+                      <div className="text-center px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-500 peer-checked:border-teal-500 peer-checked:bg-teal-50 peer-checked:text-teal-700 transition-all">
+                        🎒 Tourist
+                      </div>
+                    </label>
+                    <label className="flex-1 cursor-pointer">
+                      <input type="radio" name="role" value="provider" checked={form.role === "provider"} onChange={handleChange} className="peer sr-only" />
+                      <div className="text-center px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-500 peer-checked:border-teal-500 peer-checked:bg-teal-50 peer-checked:text-teal-700 transition-all">
+                        🏢 Tour Provider
+                      </div>
+                    </label>
+                  </div>
                   <div>
                     <label className="block text-gray-700 text-sm font-semibold mb-1.5">Full Name</label>
                     <input type="text" name="name" value={form.name} onChange={handleChange} required placeholder="John Doe"

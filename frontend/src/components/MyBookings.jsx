@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import API from "../utils/api";
 import { getUser } from "../utils/auth";
@@ -20,7 +20,8 @@ const MyBookings = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await API.get("/bookings/my");
+        const endpoint = user?.role === 'provider' ? "/bookings" : "/bookings/my";
+        const res = await API.get(endpoint);
         setBookings(res.data.bookings || []);
       } catch { setBookings([]); }
       finally { setLoading(false); }
@@ -48,7 +49,7 @@ const MyBookings = () => {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center" style={{paddingTop:"72px"}}>
-      <div className="text-center"><div className="text-5xl mb-4 animate-bounce">🎫</div><p className="text-gray-500">Loading your bookings...</p></div>
+      <div className="text-center"><div className="text-5xl mb-4 animate-bounce">🎫</div><p className="text-gray-500">Loading bookings...</p></div>
     </div>
   );
 
@@ -61,9 +62,13 @@ const MyBookings = () => {
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <p className="text-blue-300 text-sm mb-1">Welcome back, <strong>{user?.name||"Traveler"}</strong> 👋</p>
-              <h1 className="text-3xl md:text-4xl font-bold" style={{fontFamily:"serif"}}>My Bookings</h1>
-              <p className="text-blue-200 mt-2 text-sm">Track and manage all your travel bookings in one place.</p>
+              <p className="text-blue-300 text-sm mb-1">Welcome back, <strong>{user?.name||"User"}</strong> 👋</p>
+              <h1 className="text-3xl md:text-4xl font-bold" style={{fontFamily:"serif"}}>
+                {user?.role === 'provider' ? 'All System Bookings' : 'My Bookings'}
+              </h1>
+              <p className="text-blue-200 mt-2 text-sm">
+                {user?.role === 'provider' ? 'Manage and track all customer travel bookings.' : 'Track and manage all your travel bookings in one place.'}
+              </p>
             </div>
             <Link to="/view" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">
               🌍 Browse More Tours

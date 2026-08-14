@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getUser } from "../utils/auth";
 
@@ -47,13 +47,20 @@ const Navbar = () => {
               <NavLink to="/home">Home</NavLink>
               <NavLink to="/about">About</NavLink>
               <NavLink to="/contact">Contact</NavLink>
-              <NavLink to="/add">Add Tour</NavLink>
               <NavLink to="/view">Browse Tours</NavLink>
-              <NavLink to="/bookings">My Bookings</NavLink>
+              {user?.role === 'provider' && <NavLink to="/add">Add Tour</NavLink>}
+              {user?.role === 'provider' ? (
+                <NavLink to="/bookings">All Bookings</NavLink>
+              ) : (
+                <NavLink to="/bookings">My Bookings</NavLink>
+              )}
               {/* User pill */}
               <div className="flex items-center gap-3 ml-2 pl-4 border-l border-gray-700">
-                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm relative group">
                   {user?.name?.[0]?.toUpperCase() || "U"}
+                  <div className="absolute -bottom-8 bg-gray-800 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    {user?.role === 'provider' ? 'Provider' : 'Tourist'}
+                  </div>
                 </div>
                 <span className="text-white text-sm font-medium max-w-[100px] truncate">{user?.name || "User"}</span>
                 <button onClick={logout}
@@ -88,9 +95,9 @@ const Navbar = () => {
               <Link to="/home">🏠 Home</Link>
               <Link to="/about">ℹ️ About</Link>
               <Link to="/contact">📞 Contact</Link>
-              <Link to="/add">➕ Add Tour</Link>
+              {user?.role === 'provider' && <Link to="/add">➕ Add Tour</Link>}
               <Link to="/view">🌍 Browse Tours</Link>
-              <Link to="/bookings">🎫 My Bookings</Link>
+              <Link to="/bookings">{user?.role === 'provider' ? '🎫 All Bookings' : '🎫 My Bookings'}</Link>
               <button onClick={logout} className="text-left text-red-400 font-medium">🚪 Logout</button>
             </>
           ) : (

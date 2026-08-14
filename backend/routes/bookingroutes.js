@@ -2,9 +2,9 @@
 const router = express.Router();
 const Booking = require("../models/booking");
 const Tour = require("../models/tour");
-const auth = require("../middleware/auth");
+const { auth, isProvider } = require("../middleware/auth");
 
-// POST — create booking (requires login)
+// POST — create booking (requires login - any role)
 router.post("/", auth, async (req, res) => {
   try {
     const { tourId, name, email, phone, travelers, date, specialRequest, customItinerary } = req.body;
@@ -22,15 +22,15 @@ router.post("/", auth, async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// GET all bookings (admin view)
-router.get("/", auth, async (req, res) => {
+// GET all bookings (ADMIN/PROVIDER VIEW)
+router.get("/", isProvider, async (req, res) => {
   try {
     const bookings = await Booking.find().sort({ createdAt: -1 });
     res.json({ bookings });
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// GET bookings by logged-in user
+// GET bookings by logged-in user (Tourist view)
 router.get("/my", auth, async (req, res) => {
   try {
     const bookings = await Booking.find({ userId: req.user.userId }).sort({ createdAt: -1 });
@@ -38,15 +38,7 @@ router.get("/my", auth, async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// GET bookings by email
-router.get("/user/:email", auth, async (req, res) => {
-  try {
-    const bookings = await Booking.find({ email: req.params.email }).sort({ createdAt: -1 });
-    res.json({ bookings });
-  } catch (err) { res.status(500).json({ message: err.message }); }
-});
-
-// PATCH — cancel booking
+// PATCH — cancel booking (Any logged-in user can cancel their own, but provider can cancel any. For simplicity, just require auth here, could be hardened further)
 router.patch("/:id/cancel", auth, async (req, res) => {
   try {
     const booking = await Booking.findByIdAndUpdate(req.params.id, { status: "cancelled" }, { new: true });
